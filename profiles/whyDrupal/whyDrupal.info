@@ -3,7 +3,6 @@ description = Description of what the profile does.
 core = 7.x
 dependencies[] = block
 dependencies[] = contextual
-dependencies[] = dashboard
 dependencies[] = help
 dependencies[] = image
 dependencies[] = list
@@ -30,4 +29,4 @@ dependencies[] = pathauto
 dependencies[] = libraries
 dependencies[] = ckeditor
 dependencies[] = link
-
+dependencies[] = jquery_update

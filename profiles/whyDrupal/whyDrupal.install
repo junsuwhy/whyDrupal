@@ -69,7 +69,7 @@ function whyDrupal_install() {
   filter_format_save($full_html_format);
 
   // Enable some standard blocks.
-  $default_theme = variable_get('theme_default', 'bootstrap');
+  $default_theme = variable_get('theme_default', 'bartik');
   $admin_theme = 'adminimal';
   $blocks = array(
     array(
@@ -89,16 +89,6 @@ function whyDrupal_install() {
       'status' => 1,
       'weight' => -1,
       'region' => 'sidebar_first',
-      'pages' => '',
-      'cache' => -1,
-    ),
-    array(
-      'module' => 'node',
-      'delta' => 'recent',
-      'theme' => $admin_theme,
-      'status' => 1,
-      'weight' => 10,
-      'region' => 'dashboard_main',
       'pages' => '',
       'cache' => -1,
     ),
@@ -172,26 +162,6 @@ function whyDrupal_install() {
       'pages' => '',
       'cache' => -1,
     ),
-    array(
-      'module' => 'user',
-      'delta' => 'new',
-      'theme' => $admin_theme,
-      'status' => 1,
-      'weight' => 0,
-      'region' => 'dashboard_sidebar',
-      'pages' => '',
-      'cache' => -1,
-    ),
-    array(
-      'module' => 'search',
-      'delta' => 'form',
-      'theme' => $admin_theme,
-      'status' => 1,
-      'weight' => -10,
-      'region' => 'dashboard_sidebar',
-      'pages' => '',
-      'cache' => -1,
-    ),
   );
   $query = db_insert('block')->fields(array('module', 'delta', 'theme', 'status', 'weight', 'region', 'pages', 'cache'));
   foreach ($blocks as $block) {
@@ -259,7 +229,6 @@ function whyDrupal_install() {
 
   // Default "Basic page" to not be promoted and have comments disabled.
   variable_set('node_options_page', array('status'));
-  variable_set('comment_page', COMMENT_NODE_HIDDEN);
 
   // Don't display date and author information for "Basic page" nodes by default.
   variable_set('node_submitted_page', FALSE);
@@ -393,8 +362,8 @@ function whyDrupal_install() {
 
   // Enable default permissions for system roles.
   $filtered_html_permission = filter_permission_name($filtered_html_format);
-  user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content', 'access comments', $filtered_html_permission));
-  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content', 'access comments', 'post comments', 'skip comment approval', $filtered_html_permission));
+    user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content', $filtered_html_permission));
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content', $filtered_html_permission));
 
   // Create a default role for site administrators, with all available permissions assigned.
   $admin_role = new stdClass();
@@ -429,4 +398,8 @@ function whyDrupal_install() {
     ->execute();
   variable_set('admin_theme', 'adminimal');
   variable_set('node_admin_theme', '1');
+
+  theme_enable(array('bootstrap'));
+  variable_set('theme_default', 'bootstrap');
+  theme_disable(array('bartik'));
 }
